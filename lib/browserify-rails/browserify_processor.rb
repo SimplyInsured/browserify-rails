@@ -204,6 +204,7 @@ module BrowserifyRails
       # ignoring -o. If this happens, we give out stdout instead.
       # If we're using exorcist, then we directly use its output
       if uses_exorcist && exorcist_stdout.present?
+        puts exorcist_stdout.class
         exorcist_stdout
       elsif stdout.present?
         stdout
