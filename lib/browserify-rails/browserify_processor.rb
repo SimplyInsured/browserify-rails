@@ -204,6 +204,7 @@ module BrowserifyRails
       # ignoring -o. If this happens, we give out stdout instead.
       # If we're using exorcist, then we directly use its output
       if uses_exorcist && exorcist_stdout.present?
+        exorcist_stdout = exorcist_stdout + '\n//# sourceMappingURL=application.min.js.map\n//# sourceRoot=https://sources.my-domain.com/src'
         exorcist_stdout
       elsif stdout.present?
         stdout
