@@ -180,8 +180,10 @@ module BrowserifyRails
         else
           bfy_output = output_file.read
         end
-        sourcemap_output_file = "#{File.dirname(file)}/#{logical_path.split('/')[-1]}.map"
-        exorcist_command = "#{exorcist_cmd} #{sourcemap_output_file} #{exorcist_options}"
+        bundle_uuid = SecureRandom.hex
+        bundle_file_name = "#{logical_path.split('/')[-1]}#{bundle_uuid}"
+        sourcemap_output_file = "#{File.dirname(file)}/#{bundle_file_name}.map"
+        exorcist_command = "#{exorcist_cmd} #{sourcemap_output_file} #{exorcist_options(bundle_file_name)}"
         Logger::log "Exorcist: #{exorcist_command}"
         exorcist_stdout, exorcist_stderr, exorcist_status = Open3.capture3(env,
                                                                            exorcist_command,
@@ -204,7 +206,7 @@ module BrowserifyRails
       # ignoring -o. If this happens, we give out stdout instead.
       # If we're using exorcist, then we directly use its output
       if uses_exorcist && exorcist_stdout.present?
-        return exorcist_stdout + '//# honeybadgerSourceRoot=[PROJECT_ROOT]/app'
+        return exorcist_stdout + '//# honeybadgerSourceRoot=[PROJECT_ROOT]'
       elsif stdout.present?
         return stdout
       else
@@ -242,9 +244,10 @@ module BrowserifyRails
       options.uniq.join(" ")
     end
 
-    def exorcist_options
+    def exorcist_options(bundle_name=nil)
       exorcist_options = []
       exorcist_base_path = config.exorcist_base_path || config.root
+      exorcist_options.push("-u #{bundle_name}") if bundle_name
       exorcist_options.push("-b #{exorcist_base_path}")
       exorcist_options.join(" ")
     end
