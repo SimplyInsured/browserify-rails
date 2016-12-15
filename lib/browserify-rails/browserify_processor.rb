@@ -180,9 +180,9 @@ module BrowserifyRails
         else
           bfy_output = output_file.read
         end
-        bundle_uuid = SecureRandom.hex
-        bundle_file_name = "#{logical_path.split('/')[-1]}#{bundle_uuid}"
-        sourcemap_output_file = "#{File.dirname(file)}/#{bundle_file_name}.map"
+        bundle_uuid = SecureRandom.hex(10)
+        bundle_file_name = "#{logical_path.split('/')[-1]}-#{bundle_uuid}.map"
+        sourcemap_output_file = "#{File.dirname(file)}/#{bundle_file_name}"
         exorcist_command = "#{exorcist_cmd} #{sourcemap_output_file} #{exorcist_options(bundle_file_name)}"
         Logger::log "Exorcist: #{exorcist_command}"
         exorcist_stdout, exorcist_stderr, exorcist_status = Open3.capture3(env,
