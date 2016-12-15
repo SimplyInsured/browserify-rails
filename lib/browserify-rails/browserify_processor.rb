@@ -192,6 +192,11 @@ module BrowserifyRails
 
         if !exorcist_status.success?
           raise BrowserifyRails::BrowserifyError.new("Error while running `#{exorcist_command}`:\n\n#{exorcist_stderr}")
+        else
+          puts sourcemap_output_file
+          target_path = sourcemap_output_file.sub('/javascripts/', '/').sub('/app/','/public/')
+          puts target_path
+          File.rename sourcemap_output_file, target_path
         end
       end
 
