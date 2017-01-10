@@ -196,6 +196,7 @@ module BrowserifyRails
           puts sourcemap_output_file
           target_path = sourcemap_output_file.sub('/javascripts/', '/').sub('/app/','/public/')
           puts target_path
+          FileUtils.mkdir_p(target_path)
           File.rename sourcemap_output_file, target_path
         end
       end
